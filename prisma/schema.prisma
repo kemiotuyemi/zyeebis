@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  category    String   // "cakes" or "food"
+  price       Int      // NGN, e.g. 100000 = ₦1,000
+  imageUrl    String?
+  available   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id           String   @id @default(cuid())
+  orderNumber  String   @unique // ZP-XXXXXX
+  customerName String
+  phone        String
+  email        String?
+  address      String   @db.Text
+  deliveryDay  String   // "Monday", "Wednesday", "Friday"
+  instructions String?  @db.Text
+  subtotal     Int      // NGN
+  total        Int      // NGN
+  status       String   @default("new") // new, payment_pending, payment_confirmed, preparing, out_for_delivery, delivered, cancelled
+  paymentStatus String  @default("pending") // pending, submitted, confirmed, failed
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  items    OrderItem[]
+  receipts Receipt[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  name      String  // snapshot
+  unitPrice Int     // snapshot
+  quantity  Int
+  subtotal  Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Receipt {
+  id        String   @id @default(cuid())
+  orderId   String
+  url       String
+  createdAt DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.Text
+}
+
+model Admin {
+  id           String @id @default(cuid())
+  email        String @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
