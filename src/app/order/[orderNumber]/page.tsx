@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import WhatsAppPrompt from "@/components/whatsapp-prompt";
 import { buildBusinessNotification, buildReceiptMessage, whatsappLink } from "@/lib/whatsapp";
 
 function formatDate(dateStr: string): string {
@@ -59,6 +60,18 @@ export default async function OrderConfirmationPage({
 
   return (
     <main className="min-h-screen bg-gray-50">
+      <WhatsAppPrompt
+        orderNumber={order.orderNumber}
+        total={order.total}
+        customerName={order.customerName}
+        deliveryDate={formatDate(order.deliveryDay)}
+        items={order.items.map((i) => ({
+          name: i.name,
+          quantity: i.quantity,
+          subtotal: i.subtotal,
+        }))}
+        whatsappLink={bizWhatsappLink}
+      />
       <div className="max-w-lg mx-auto px-4 py-12">
         <div className="bg-white rounded-lg shadow p-6 text-center">
           <CheckCircle size={64} className="mx-auto text-green-500" />

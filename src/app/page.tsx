@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import type { Product } from "@/generated/prisma/client";
 import Link from "next/link";
 import ProductCard from "@/components/product-card";
+import CheckoutCta from "@/components/checkout-cta";
 import Image from "next/image";
 
 export const revalidate = 60;
@@ -73,6 +74,8 @@ export default async function Home() {
           </div>
         )}
       </section>
+
+      <CheckoutCta />
 
       <section className="bg-gray-50 py-8 px-4 text-center">
         <p className="text-gray-600 mb-3">
