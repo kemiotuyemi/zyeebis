@@ -36,7 +36,7 @@ export default async function OrderConfirmationPage({
   if (!order) notFound();
 
   const paymentAccount = process.env.OPAY_ACCOUNT || "7050337273";
-  const businessPhone = process.env.BUSINESS_PHONE || "+2347050337273";
+  const businessPhone = process.env.BUSINESS_PHONE || "+2348101638706";
 
   const bizMessage = buildBusinessNotification({
     orderNumber: order.orderNumber,

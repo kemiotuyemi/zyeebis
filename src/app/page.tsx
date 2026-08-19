@@ -3,6 +3,7 @@ import type { Product } from "@/generated/prisma/client";
 import Link from "next/link";
 import ProductCard from "@/components/product-card";
 import CheckoutCta from "@/components/checkout-cta";
+import PaymentDetails from "@/components/payment-details";
 import Image from "next/image";
 
 export const revalidate = 60;
@@ -77,12 +78,14 @@ export default async function Home() {
 
       <CheckoutCta />
 
+      <PaymentDetails />
+
       <section className="bg-gray-50 py-8 px-4 text-center">
         <p className="text-gray-600 mb-3">
           Questions about your order?
         </p>
         <a
-          href="https://wa.me/2347050337273"
+          href={`https://wa.me/${(process.env.BUSINESS_PHONE || "+2348101638706").replace(/[^0-9]/g, "")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors min-h-[48px]"
