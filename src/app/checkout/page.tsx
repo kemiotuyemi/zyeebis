@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/contexts/cart";
-import { Package, Truck } from "lucide-react";
+import { Package, Truck, Plus, Minus, Trash2 } from "lucide-react";
 import DatePicker from "@/components/date-picker";
 
 interface FormErrors {
@@ -15,7 +15,7 @@ interface FormErrors {
 }
 
 export default function CheckoutPage() {
-  const { items, subtotal, clearCart } = useCart();
+  const { items, subtotal, clearCart, updateQuantity, removeItem } = useCart();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [placed, setPlaced] = useState(false);
@@ -197,16 +197,54 @@ export default function CheckoutPage() {
 
         {/* Order Summary */}
         <section className="bg-white rounded-lg shadow p-4 mb-6">
-          <h2 className="font-semibold mb-3">Order Summary</h2>
-          <div className="divide-y text-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-semibold">Order Summary</h2>
+            <Link href="/cart" className="text-sm text-fuchsia hover:underline">
+              Edit in Cart
+            </Link>
+          </div>
+          <div className="divide-y">
             {items.map((item) => (
-              <div key={item.id} className="flex justify-between py-2">
-                <span>
-                  {item.name} &times; {item.quantity}
-                </span>
-                <span className="font-semibold">
+              <div key={item.id} className="flex items-center gap-3 py-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{item.name}</p>
+                  <p className="text-xs text-gray-500">
+                    ₦{item.price.toLocaleString()} each
+                  </p>
+                </div>
+
+                <div className="flex items-center border rounded-lg flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                    className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 disabled:opacity-30"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span className="w-7 text-center font-semibold text-sm">
+                    {item.quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="w-8 h-8 flex items-center justify-center hover:bg-gray-100"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+
+                <p className="font-semibold text-sm min-w-[70px] text-right">
                   ₦{(item.price * item.quantity).toLocaleString()}
-                </span>
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => removeItem(item.id)}
+                  className="text-gray-400 hover:text-red-500 min-h-[40px] min-w-[40px] flex items-center justify-center flex-shrink-0"
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
             ))}
           </div>
