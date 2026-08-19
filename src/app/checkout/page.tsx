@@ -18,6 +18,7 @@ export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [placed, setPlaced] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
   const [form, setForm] = useState({
@@ -29,13 +30,21 @@ export default function CheckoutPage() {
     instructions: "",
   });
 
-  if (items.length === 0) {
+  if (items.length === 0 && !placed) {
     return (
       <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
         <h1 className="text-2xl font-bold">No items to checkout</h1>
         <Link href="/" className="mt-4 text-fuchsia hover:underline">
           Browse Products
         </Link>
+      </main>
+    );
+  }
+
+  if (placed) {
+    return (
+      <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
+        <h1 className="text-xl font-bold">Placing your order...</h1>
       </main>
     );
   }
@@ -82,9 +91,11 @@ export default function CheckoutPage() {
       if (!res.ok) throw new Error("Failed to place order");
 
       const data = await res.json();
+      setPlaced(true);
       clearCart();
       router.push(`/order/${data.orderNumber}`);
     } catch {
+      setPlaced(false);
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
