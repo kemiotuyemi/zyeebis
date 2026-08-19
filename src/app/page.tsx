@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import type { Product } from "@/generated/prisma/client";
 import Link from "next/link";
 import ProductCard from "@/components/product-card";
+import Image from "next/image";
+
+export const revalidate = 60;
 
 async function getProducts(): Promise<Product[]> {
   try {
@@ -50,9 +53,12 @@ export default async function Home() {
               >
                 <Link href={`/products/${product.id}`}>
                   {product.imageUrl ? (
-                    <img
+                    <Image
                       src={product.imageUrl}
                       alt={product.name}
+                      width={800}
+                      height={400}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="w-full h-48 object-cover"
                     />
                   ) : (

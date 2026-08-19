@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useCart } from "@/contexts/cart";
 import { ShoppingCart, Plus, Minus } from "lucide-react";
 import type { Product } from "@/generated/prisma/client";
@@ -31,9 +32,12 @@ export default function ProductDetailClient({ product }: { product: Product }) {
         <div className="flex flex-col sm:flex-row gap-8">
           {product.imageUrl && (
             <div className="sm:w-1/2">
-              <img
+              <Image
                 src={product.imageUrl}
                 alt={product.name}
+                width={800}
+                height={600}
+                sizes="(max-width: 640px) 100vw, 50vw"
                 className="w-full h-64 sm:h-80 object-cover rounded-lg"
               />
             </div>
