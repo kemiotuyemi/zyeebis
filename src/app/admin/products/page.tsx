@@ -127,7 +127,8 @@ export default function AdminProductsPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      {/* Desktop table */}
+      <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b">
             <tr>
@@ -178,6 +179,46 @@ export default function AdminProductsPage() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {products.map((p) => (
+          <div key={p.id} className="bg-white rounded-lg shadow p-4">
+            <div className="flex items-start gap-3">
+              {p.imageUrl ? (
+                <img src={p.imageUrl} alt={p.name} className="w-14 h-14 rounded object-cover flex-shrink-0" />
+              ) : (
+                <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400 flex-shrink-0">
+                  No img
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium">{p.name}</p>
+                    <p className="text-gray-500 text-xs capitalize">{p.category}</p>
+                  </div>
+                  <button
+                    onClick={() => toggleAvailability(p)}
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${p.available ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+                  >
+                    {p.available ? "Available" : "Unavailable"}
+                  </button>
+                </div>
+                <p className="font-semibold text-fuchsia mt-1">₦{p.price.toLocaleString()}</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-3 pt-3 border-t">
+              <button onClick={() => openEdit(p)} className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-fuchsia">
+                <Pencil size={14} /> Edit
+              </button>
+              <button onClick={() => handleDelete(p.id)} className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-500">
+                <Trash2 size={14} /> Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Modal */}
