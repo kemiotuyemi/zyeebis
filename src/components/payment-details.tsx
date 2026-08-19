@@ -1,4 +1,5 @@
 import { Landmark } from "lucide-react";
+import CopyAccountNumber from "@/components/copy-account-number";
 
 export default function PaymentDetails() {
   const paymentAccount = process.env.OPAY_ACCOUNT || "7050337273";
@@ -20,9 +21,9 @@ export default function PaymentDetails() {
           <span className="text-gray-500">Provider</span>
           <span className="font-bold">Opay</span>
         </div>
-        <div className="flex justify-between gap-4">
+        <div className="flex justify-between items-center gap-4">
           <span className="text-gray-500">Account Number</span>
-          <span className="font-bold text-fuchsia">{paymentAccount}</span>
+          <CopyAccountNumber account={paymentAccount} />
         </div>
         <div className="flex justify-between gap-4">
           <span className="text-gray-500">Account Name</span>
